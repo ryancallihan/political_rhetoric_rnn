@@ -38,6 +38,7 @@ def rnn_hidden_layers(
         cell = tf.nn.rnn_cell.MultiRNNCell(cells, state_is_tuple=True)
         init_state = cell.zero_state(config.BATCH_SIZE, tf.float32)
         hidden_layers, _ = tf.nn.dynamic_rnn(cell, inputs, initial_state=init_state)
+<<<<<<< HEAD
         # cells = [rnn.GRUCell(cell) for cell in config.HIDDEN_SIZES]
         # multicell = rnn.MultiRNNCell(cells, state_is_tuple=False)
         # if phase == Phase.Train:
@@ -45,6 +46,9 @@ def rnn_hidden_layers(
         # # input_state = tf.placeholder(tf.float32, [None, sum(config.HIDDEN_SIZES)], name='input_state')
         # input_state = multicell.zero_state(config.BATCH_SIZE, tf.float32)
         # hidden_layers, _ = tf.nn.dynamic_rnn(multicell, inputs, dtype=tf.float32, initial_state=input_state)
+=======
+     
+>>>>>>> 44a38ca68e140896cc222f465287b10aa7c8cbdf
 
     return hidden_layers
 
