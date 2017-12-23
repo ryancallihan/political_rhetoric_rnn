@@ -27,13 +27,13 @@ def run():
 
         w2v_layer = processing.create_embedding_layer(w2v_path)
 
-        # train(data_path=quarter,
-        #       w2v_layer=w2v_layer,
-        #       config=config,
-        #       num_words=num_words,
-        #       num_classes=num_classes,
-        #       data={"x_train": x_train, "y_train": y_train, "x_test": x_test, "y_test": y_test},
-        #       from_saved=False)
+        train(data_path=quarter,
+              w2v_layer=w2v_layer,
+              config=config,
+              num_words=num_words,
+              num_classes=num_classes,
+              data={"x_train": x_train, "y_train": y_train, "x_test": x_test, "y_test": y_test},
+              from_saved=False)
 
         # Chooses most indicative tweets for each quarter
         tweet_predict(data_path=quarter,
