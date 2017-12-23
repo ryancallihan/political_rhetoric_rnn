@@ -105,17 +105,18 @@ def tweet_predict(data_path, data, config, processing, w2v_layer):
     num_classes = len(y_tokenizer.word_index.items())
 
     print("NUM WORDS: ", num_words, " NUM CLASSES: ", num_classes)
-
+    print(data["x"].shape)
+    print(data["y"].shape)
     validation_batches = dp.generate_instances(
-        data["x_test"],
-        data["y_test"],
+        data["x"],
+        data["y"],
         num_words,
         num_classes,
         config.MAX_TIMESTEPS,
         batch_size=config.BATCH_SIZE)
 
     # Train the model
-    predict(config, validation_batches, w2v_layer, data_path, tweets_test)
+    predict(config, validation_batches, w2v_layer, data_path, np.append(tweets_train, tweets_test))
     print("FINISHED:", data_path, "TWEET PREDICTION\n\n")
 
 
@@ -130,12 +131,12 @@ def word_predict(data_path, processing, w2v_layer, config):
     """
     print("PREDICTING WORD FOR SECTION:", data_path)
 
-    _, _, data, _, x_tokenizer, y_tokenizer = processing.run(
+    data1, _, data2, _, x_tokenizer, y_tokenizer = processing.run(
         data_path=os.path.join("data", ''.join([data_path, "_data.tsv"])),
         y_mode="vectorize")
 
     get_counts = Tokenizer()
-    get_counts.fit_on_texts(data)
+    get_counts.fit_on_texts(np.concatenate((data1, data2)))
 
     words = [word[0] for word in get_counts.word_index.items()]
 
