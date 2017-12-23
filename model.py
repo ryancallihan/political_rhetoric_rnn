@@ -30,21 +30,15 @@ def rnn_hidden_layers(
         hidden_layers = tf.concat([fstate[-1], bstate[-1]], axis=1)
 
     else:
-        # cells = [tf.nn.rnn_cell.LSTMCell(state_size, activation=tf.nn.tanh, state_is_tuple=True) for state_size in
-        #          config.HIDDEN_SIZES]
-        # if phase == Phase.Train:
-        #     cells = [rnn.DropoutWrapper(cell, output_keep_prob=config.RNN_OUTPUT_DROPOUT,
-        #                                 state_keep_prob=config.RNN_STATE_DROPOUT) for cell in cells]
-        # cell = tf.nn.rnn_cell.MultiRNNCell(cells, state_is_tuple=True)
-        # init_state = cell.zero_state(config.BATCH_SIZE, tf.float32)
-        # hidden_layers, _ = tf.nn.dynamic_rnn(cell, inputs, initial_state=init_state)
-        cells = [rnn.GRUCell(cell) for cell in config.HIDDEN_SIZES]
-        multicell = rnn.MultiRNNCell(cells, state_is_tuple=False)
+        cells = [tf.nn.rnn_cell.LSTMCell(state_size, activation=tf.nn.tanh, state_is_tuple=True) for state_size in
+                 config.HIDDEN_SIZES]
         if phase == Phase.Train:
-            multicell = rnn.DropoutWrapper(multicell, output_keep_prob=config.RNN_OUTPUT_DROPOUT)
-        # input_state = tf.placeholder(tf.float32, [None, sum(config.HIDDEN_SIZES)], name='input_state')
-        input_state = multicell.zero_state(config.BATCH_SIZE, tf.float32)
-        hidden_layers, _ = tf.nn.dynamic_rnn(multicell, inputs, dtype=tf.float32, initial_state=input_state)
+            cells = [rnn.DropoutWrapper(cell, output_keep_prob=config.RNN_OUTPUT_DROPOUT,
+                                        state_keep_prob=config.RNN_STATE_DROPOUT) for cell in cells]
+        cell = tf.nn.rnn_cell.MultiRNNCell(cells, state_is_tuple=True)
+        init_state = cell.zero_state(config.BATCH_SIZE, tf.float32)
+        hidden_layers, _ = tf.nn.dynamic_rnn(cell, inputs, initial_state=init_state)
+     
 
     return hidden_layers
 
