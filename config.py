@@ -1,6 +1,6 @@
 class Config:
     N_EPOCHS = 20
-    BIDIRECTIONAL = False
+    BIDIRECTIONAL = True
     TEST_SIZE = 0.2
     START_LR = 0.001
     DECAY_STEPS = 177
