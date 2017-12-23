@@ -1,5 +1,5 @@
 class Config:
-    N_EPOCHS = 2
+    N_EPOCHS = 20
     BIDIRECTIONAL = False
     TEST_SIZE = 0.2
     START_LR = 0.001

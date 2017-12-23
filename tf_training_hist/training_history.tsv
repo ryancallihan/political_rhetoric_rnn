@@ -1,0 +1,2 @@
+epoch	train_loss	val_loss	val_acc	f1score	recall	precision	time	
+1	165.685	154.973	68.089	68.089	0.681	0.681	2015_1q
