@@ -5,6 +5,64 @@ import pickle as p
 from keras.preprocessing.text import Tokenizer
 from sklearn.model_selection import train_test_split
 
+def generate_instances(
+        data,
+        labels_data,
+        n_word,
+        n_label,
+        max_timesteps,
+        batch_size=128):
+    """
+    prepares batches for tensorflow model.
+    :param data:
+    :param labels_data:
+    :param n_word:
+    :param n_label:
+    :param max_timesteps:
+    :param batch_size:
+    :return:
+    """
+    n_batches = len(data) // batch_size
+
+    # We are discarding the last batch for now, for simplicity.
+    labels = np.zeros(
+        shape=(
+            n_batches,
+            batch_size,
+            n_label),
+        dtype=np.float32)
+    lengths = np.zeros(
+        shape=(
+            n_batches,
+            batch_size),
+        dtype=np.int32)
+    words = np.zeros(
+        shape=(
+            n_batches,
+            batch_size,
+            max_timesteps),
+        dtype=np.int32)
+
+    for batch in range(n_batches):
+        for idx in range(batch_size):
+            word = data[(batch * batch_size) + idx]
+            # Add label distribution
+
+            label = labels_data[(batch * batch_size) + idx]
+            index = np.nonzero(label)[0][0]
+            labels[batch, idx, index] = 1
+
+            # Sequence
+            timesteps = min(max_timesteps, len(word))
+
+            # Sequence length (time steps)
+            lengths[batch, idx] = timesteps
+
+            # Word characters
+            words[batch, idx, :timesteps] = word[:timesteps]
+
+    return words, lengths, labels, n_word
+
 
 def load_tsv(filename):
     """
